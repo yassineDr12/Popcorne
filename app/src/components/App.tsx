@@ -8,7 +8,7 @@ import { Box, Grid } from "@mui/material";
 
 const fetchMovieData = async (movieTitle: string | undefined) => {
   try {
-    const response = await axios.get(`http://www.omdbapi.com/?s=${movieTitle}&apikey=dbc2c0f9`);
+    const response = await axios.get(`https://www.omdbapi.com/?s=${movieTitle}&apikey=dbc2c0f9`);
     var data = response.data.Search;
     return data;
   } catch (error) {
