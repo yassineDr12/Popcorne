@@ -3,8 +3,8 @@ import Navbar from "./Navbar";
 import axios from "axios";
 import { Movie } from "../dataTypes";
 import MovieList from "./MovieList";
-import { Box, Grid, Paper, styled } from "@mui/material";
-import AlignItemsList from "./Scratch";
+import { Box, Grid } from "@mui/material";
+// import AlignItemsList from "./Scratch";
 
 const fetchMovieData = async (movieTitle: string | undefined) => {
   try {
