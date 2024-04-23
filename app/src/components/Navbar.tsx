@@ -6,7 +6,9 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import popcornIcon from "../icons/popcorn-icon.png";
-import { ReactNode } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import { INavbarProps } from "../dataTypes";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -48,18 +50,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// Add border-radius to the AppBar component
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   borderRadius: theme.spacing(1),
 }));
 
-export default function Navbar({
-  onKeyDown,
-  children,
-}: {
-  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  children: ReactNode;
-}) {
+const fetchMovieData = async (searchQuery: string | undefined) => {
+  try {
+    const response = await axios.get(`https://www.omdbapi.com/?s=${searchQuery}&apikey=dbc2c0f9`);
+    var data = response.data.Search;
+    return data;
+  } catch (error) {
+    console.error("Error fetching movie data:", error);
+  }
+};
+
+const Navbar: React.FC<INavbarProps> = ({
+  searchQuery,
+  searchResults,
+  isLoading,
+  setSearchQuery,
+  setSearchResults,
+  setIsLoading,
+}) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (searchQuery) {
+        setIsLoading(true);
+        const data = await fetchMovieData(searchQuery);
+        setSearchResults(data);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [searchQuery, setIsLoading, setSearchResults]);
+
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      setSearchQuery(event.currentTarget.value);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar position="static">
@@ -75,14 +106,22 @@ export default function Navbar({
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              onKeyDown={onKeyDown}
+              onKeyDown={handleSearch}
               placeholder="Search movies…"
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Typography variant="caption">{children}</Typography>
+          <Typography variant="caption">
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <div>{searchResults?.length > 0 ? `${searchResults.length} results found` : "No results found"}</div>
+            )}
+          </Typography>
         </Toolbar>
       </StyledAppBar>
     </Box>
   );
-}
+};
+
+export default Navbar;
