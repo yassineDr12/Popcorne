@@ -14,6 +14,7 @@ export interface IMovieListProps {
 
 export interface IBodyProps {
   searchResults: IMovie[];
+  isLoading: boolean;
 }
 export interface INavbarProps {
   searchQuery: string | undefined;

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  List,
   ListItem,
   Divider,
   ListItemText,
@@ -8,19 +7,30 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Typography,
 } from "@mui/material";
 import { IMovieListProps } from "../dataTypes";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const MovieList: React.FC<IMovieListProps> = ({ searchResults }) => {
-  return searchResults.length ? (
+  return searchResults?.length ? (
     <Grid item xs={4}>
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
-          Watched List
+          <Typography variant="h6" gutterBottom>
+            Search Results
+          </Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails
+          sx={{
+            height: "75vh", // Set the fixed height of the AccordionDetails
+            overflowY: "auto", // Make the content scrollable if it exceeds the fixed height
+            "&::-webkit-scrollbar": {
+              width: "0 !important", // Hide the scrollbar in WebKit browsers
+            },
+          }}
+        >
           {searchResults?.map((movie, index) => (
             <React.Fragment key={movie.imdbID}>
               <ListItem alignItems="flex-start">
@@ -31,7 +41,7 @@ const MovieList: React.FC<IMovieListProps> = ({ searchResults }) => {
                 />
                 <ListItemText primary={movie.Title} secondary={movie.Year} />
               </ListItem>
-              {index !== searchResults.length - 1 && <Divider variant="inset" component="li" />}
+              {index !== searchResults.length - 1 && <Divider sx={{ margin: "8px 0" }} />}
             </React.Fragment>
           ))}
         </AccordionDetails>

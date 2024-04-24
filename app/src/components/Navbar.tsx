@@ -54,16 +54,6 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   borderRadius: theme.spacing(1),
 }));
 
-const fetchMovieData = async (searchQuery: string | undefined) => {
-  try {
-    const response = await axios.get(`https://www.omdbapi.com/?s=${searchQuery}&apikey=dbc2c0f9`);
-    var data = response.data.Search;
-    return data;
-  } catch (error) {
-    console.error("Error fetching movie data:", error);
-  }
-};
-
 const Navbar: React.FC<INavbarProps> = ({
   searchQuery,
   searchResults,
@@ -72,19 +62,6 @@ const Navbar: React.FC<INavbarProps> = ({
   setSearchResults,
   setIsLoading,
 }) => {
-  useEffect(() => {
-    const fetchData = async () => {
-      if (searchQuery) {
-        setIsLoading(true);
-        const data = await fetchMovieData(searchQuery);
-        setSearchResults(data);
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [searchQuery, setIsLoading, setSearchResults]);
-
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       setSearchQuery(event.currentTarget.value);
@@ -92,26 +69,27 @@ const Navbar: React.FC<INavbarProps> = ({
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, marginBottom: 2 }}>
       <StyledAppBar position="static">
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img src={popcornIcon} alt="Popcorn Icon" style={{ width: 32, height: 32, marginRight: 8 }} />
             <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
-              Popcorn
+              Popcorne
             </Typography>
           </Box>
-          <Search>
+          <Search sx={{ width: 150 }}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               onKeyDown={handleSearch}
+              name="search movie"
               placeholder="Search movies…"
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Typography variant="caption">
+          <Typography variant="caption" sx={{ width: 150 }}>
             {isLoading ? (
               <div>Loading...</div>
             ) : (

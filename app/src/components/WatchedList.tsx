@@ -1,30 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  List,
   ListItem,
   Divider,
   ListItemText,
   Grid,
-  Button,
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IWatchedListProps } from "../dataTypes";
 
 const WatchedList: React.FC<IWatchedListProps> = ({ watchedList }) => {
-  const [collapsed, setCollapsed] = useState<boolean>(false);
-
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
-  };
-
   return watchedList.length ? (
     <Grid item xs={4}>
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
-          Watched List
+          <Typography variant="h6" gutterBottom>
+            Watched List
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           {watchedList?.map((movie, index) => (
@@ -37,7 +32,7 @@ const WatchedList: React.FC<IWatchedListProps> = ({ watchedList }) => {
                 />
                 <ListItemText primary={movie.Title} secondary={movie.Year} />
               </ListItem>
-              {index !== watchedList.length - 1 && <Divider variant="inset" component="li" />}
+              {index !== watchedList.length - 1 && <Divider sx={{ margin: "8px 0" }} />}
             </React.Fragment>
           ))}
         </AccordionDetails>
