@@ -6,8 +6,6 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import popcornIcon from "../icons/popcorn-icon.png";
-import { useEffect } from "react";
-import axios from "axios";
 import { INavbarProps } from "../dataTypes";
 
 const Search = styled("div")(({ theme }) => ({
@@ -54,14 +52,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   borderRadius: theme.spacing(1),
 }));
 
-const Navbar: React.FC<INavbarProps> = ({
-  searchQuery,
-  searchResults,
-  isLoading,
-  setSearchQuery,
-  setSearchResults,
-  setIsLoading,
-}) => {
+const Navbar: React.FC<INavbarProps> = ({ searchResults, isLoading, setSearchQuery }) => {
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       setSearchQuery(event.currentTarget.value);
