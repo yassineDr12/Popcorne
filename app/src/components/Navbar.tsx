@@ -52,7 +52,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   borderRadius: theme.spacing(1),
 }));
 
-const Navbar: React.FC<INavbarProps> = ({ searchResults, isLoading, setSearchQuery }) => {
+const Navbar: React.FC<INavbarProps> = ({ searchResults, isLoading, setSearchQuery, children }) => {
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       setSearchQuery(event.currentTarget.value);
@@ -60,7 +60,7 @@ const Navbar: React.FC<INavbarProps> = ({ searchResults, isLoading, setSearchQue
   };
 
   return (
-    <Box sx={{ flexGrow: 1, marginBottom: 2 }}>
+    <Box sx={{ flexGrow: 1, margin: 1 }}>
       <StyledAppBar position="static">
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -69,24 +69,27 @@ const Navbar: React.FC<INavbarProps> = ({ searchResults, isLoading, setSearchQue
               Popcorne
             </Typography>
           </Box>
-          <Search sx={{ width: 150 }}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              onKeyDown={handleSearch}
-              name="search movie"
-              placeholder="Search movies…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-          <Typography variant="caption" sx={{ width: 150 }}>
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : (
-              <div>{searchResults?.length > 0 ? `${searchResults.length} results found` : "No results found"}</div>
-            )}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Search sx={{ width: 150 }}>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                onKeyDown={handleSearch}
+                name="search movie"
+                placeholder="Search movies…"
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+            <Typography variant="caption" sx={{ width: 100, opacity: 0.5 }}>
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : (
+                <div>{searchResults?.length > 0 ? `${searchResults.length} results found` : "No results found"}</div>
+              )}
+            </Typography>
+          </Box>
+          {children}
         </Toolbar>
       </StyledAppBar>
     </Box>

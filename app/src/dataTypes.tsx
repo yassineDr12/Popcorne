@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 export interface IMovie {
   Title: string;
@@ -23,6 +23,7 @@ export interface INavbarProps {
   setSearchQuery: Dispatch<SetStateAction<string | undefined>>;
   setSearchResults: Dispatch<SetStateAction<IMovie[]>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  children: React.ReactNode;
 }
 
 export interface IWatchedListProps {

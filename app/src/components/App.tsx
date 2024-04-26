@@ -1,8 +1,14 @@
+import { createContext, useContext, useMemo } from "react";
+import IconButton from "@mui/material/IconButton";
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Body from "./Body";
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { IMovie } from "../dataTypes";
 import axios from "axios";
+import { CssBaseline } from "@mui/material";
 // import AlignItemsList from "./Scratch";
 
 const fetchMovieData = async (searchQuery: string | undefined) => {
@@ -15,7 +21,11 @@ const fetchMovieData = async (searchQuery: string | undefined) => {
   }
 };
 
-function App() {
+const ColorModeContext = createContext({ App: () => {} });
+
+function MyApp() {
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
   const [searchResults, setSearchResults] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +42,6 @@ function App() {
 
     fetchData();
   }, [searchQuery]);
-
   return (
     <>
       <Navbar
@@ -42,10 +51,43 @@ function App() {
         setSearchQuery={setSearchQuery}
         setSearchResults={setSearchResults}
         setIsLoading={setIsLoading}
-      ></Navbar>
+      >
+        <IconButton sx={{ ml: 1 }} onClick={colorMode.App} color="inherit">
+          {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Navbar>
       <Body searchResults={searchResults} isLoading={isLoading} />
     </>
   );
 }
 
-export default App;
+export default function App() {
+  const [mode, setMode] = useState<"light" | "dark">("light");
+  const colorMode = useMemo(
+    () => ({
+      App: () => {
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+      },
+    }),
+    []
+  );
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
+
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <MyApp />
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
+}

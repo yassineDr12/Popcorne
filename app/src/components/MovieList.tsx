@@ -19,7 +19,7 @@ const MovieList: React.FC<IMovieListProps> = ({ searchResults }) => {
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
           <Typography variant="h6" gutterBottom>
-            Search Results
+            SEARCH RESULTS
           </Typography>
         </AccordionSummary>
         <AccordionDetails
