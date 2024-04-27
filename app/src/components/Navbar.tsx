@@ -52,7 +52,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   borderRadius: theme.spacing(1),
 }));
 
-const Navbar: React.FC<INavbarProps> = ({ searchResults, isLoading, setSearchQuery, children }) => {
+const Navbar: React.FC<INavbarProps> = ({ searchResults, movieSearchLoading, setSearchQuery, children }) => {
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       setSearchQuery(event.currentTarget.value);
@@ -82,7 +82,7 @@ const Navbar: React.FC<INavbarProps> = ({ searchResults, isLoading, setSearchQue
               />
             </Search>
             <Typography variant="caption" sx={{ width: 100, opacity: 0.5 }}>
-              {isLoading ? (
+              {movieSearchLoading ? (
                 <div>Loading...</div>
               ) : (
                 <div>{searchResults?.length > 0 ? `${searchResults.length} results found` : "No results found"}</div>

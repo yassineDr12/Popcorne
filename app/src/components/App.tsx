@@ -28,35 +28,40 @@ function MyApp() {
   const colorMode = useContext(ColorModeContext);
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
   const [searchResults, setSearchResults] = useState<IMovie[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [movieSearchLoading, setMovieSearchLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       if (searchQuery) {
-        setIsLoading(true);
+        setMovieSearchLoading(true);
         const data = await fetchMovieData(searchQuery);
         setSearchResults(data);
-        setIsLoading(false);
+        setMovieSearchLoading(false);
       }
     };
 
     fetchData();
   }, [searchQuery]);
+
   return (
     <>
       <Navbar
         searchQuery={searchQuery}
         searchResults={searchResults}
-        isLoading={isLoading}
+        movieSearchLoading={movieSearchLoading}
         setSearchQuery={setSearchQuery}
         setSearchResults={setSearchResults}
-        setIsLoading={setIsLoading}
+        setMovieSearchLoading={setMovieSearchLoading}
       >
         <IconButton sx={{ ml: 1 }} onClick={colorMode.App} color="inherit">
           {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>
       </Navbar>
-      <Body searchResults={searchResults} isLoading={isLoading} />
+      <Body
+        searchResults={searchResults}
+        movieSearchLoading={movieSearchLoading}
+        setMovieSearchLoading={setMovieSearchLoading}
+      />
     </>
   );
 }
