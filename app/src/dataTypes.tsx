@@ -35,6 +35,7 @@ export interface INavbarProps {
 
 export interface IWatchedListProps {
   watchedList: IMovie[];
+  watchedListRating: number;
 }
 
 export interface IStyledCardProps {
@@ -45,4 +46,5 @@ export interface IPersonalRatingProps {
   selectedMovie: IMovie | undefined;
   movieDetailLoading: boolean;
   setSelectedMovie: Dispatch<React.SetStateAction<IMovie | undefined>>;
+  handleAddMovie: (movie: IMovie, ratingValue: number) => void;
 }

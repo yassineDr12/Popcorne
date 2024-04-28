@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IBodyProps, IMovie } from "../dataTypes";
-import { Grid } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import MovieList from "./MovieList";
 import WatchedList from "./WatchedList";
 import StyledCard from "./StyledCard";
@@ -33,25 +33,20 @@ const getMovieDetails = async (imdbID: string) => {
 
 const Body: React.FC<IBodyProps> = ({ searchResults, movieSearchLoading }) => {
   const [watchedList, setWatchedList] = useState<IMovie[]>([]);
+  const [watchedListRating, setWatchedListRating] = useState(0);
   const [selectedMovie, setSelectedMovie] = useState<IMovie | undefined>(undefined);
   const [movieDetailLoading, setMovieDetailLoading] = useState(false);
-  const [rightCard, setRightCard] = useState("WatchedList");
-
-  useEffect(() => {
-    if (searchResults?.length > 1) {
-      setWatchedList([searchResults[0], searchResults[1]]);
-    }
-  }, [searchResults]);
-
-  useEffect(() => {
-    selectedMovie ? setRightCard("PersonalRating") : setRightCard("WatchedList");
-  }, [selectedMovie]);
 
   const handleMovieClick = async (movie: IMovie) => {
     setMovieDetailLoading(true);
     const detailedMovie = await getMovieDetails(movie.imdbID);
     setSelectedMovie(detailedMovie);
     setMovieDetailLoading(false);
+  };
+
+  const handleAddMovie = (movie: IMovie, ratingValue: number) => {
+    watchedListRating ? setWatchedListRating((prev) => (prev + ratingValue) / 2) : setWatchedListRating(ratingValue);
+    setWatchedList((prevWatchedList) => [...prevWatchedList, movie]);
   };
 
   return (
@@ -64,13 +59,25 @@ const Body: React.FC<IBodyProps> = ({ searchResults, movieSearchLoading }) => {
         />
       </StyledCard>
       <StyledCard>
-        {rightCard === "WatchedList" ? (
-          <WatchedList watchedList={watchedList} />
+        {movieDetailLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "10vh", // Set height of the container to full viewport height
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : !selectedMovie ? (
+          <WatchedList watchedList={watchedList} watchedListRating={watchedListRating} />
         ) : (
           <PersonalRating
             selectedMovie={selectedMovie}
             movieDetailLoading={movieDetailLoading}
             setSelectedMovie={setSelectedMovie}
+            handleAddMovie={handleAddMovie}
           />
         )}
       </StyledCard>

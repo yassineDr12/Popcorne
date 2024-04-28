@@ -1,39 +1,57 @@
 import React from "react";
 import { ListItem, Divider, ListItemText, AccordionSummary, AccordionDetails, Typography, Box } from "@mui/material";
-import { IWatchedListProps } from "../dataTypes";
+import { IMovie, IWatchedListProps } from "../dataTypes";
 
-const WatchedList: React.FC<IWatchedListProps> = ({ watchedList }) => {
-  const summary = {
-    movies: 3,
-    averageRating: 7.65,
-    personalRating: 8.79,
-    watchTime: 284,
-  };
+function calculateTotalDuration(watchedList: IMovie[]): string {
+  const durations = watchedList.map((movie) => movie.Length!);
+  const totalMinutes = durations.reduce((acc, duration) => {
+    const [minutes] = duration.split(" ").map(Number);
+    return acc + minutes;
+  }, 0);
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${hours}h ${minutes}min`;
+}
+
+const WatchedList: React.FC<IWatchedListProps> = ({ watchedList, watchedListRating }) => {
+  let summary;
+
+  if (watchedList.length > 0) {
+    summary = {
+      movies: watchedList.length,
+      averageRating: (
+        watchedList.map((movie) => movie.imdbRating!).reduce((acc, rating) => acc + rating) / watchedList.length
+      ).toFixed(2),
+      watchTime: calculateTotalDuration(watchedList),
+    };
+  }
 
   return watchedList.length ? (
     <>
       <AccordionSummary>
         <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom sx={{ textAlign: "center", marginTop: 6 }}>
             MOVIES YOU WATCHED
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
             <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`🎬${summary.movies} movie${summary.movies !== 1 ? "s" : ""}`}
+              {`🎬${summary?.movies} movie${summary?.movies !== 1 ? "s" : ""}`}
             </Typography>
             <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`🌟${summary.personalRating}`}
+              {`🌟${watchedListRating}`}
             </Typography>
             <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`⭐ ${summary.averageRating}`}
+              {`⭐ ${summary?.averageRating}`}
             </Typography>
             <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`⌛ ${summary.watchTime} min`}
+              {`⌛ ${summary?.watchTime}`}
             </Typography>
           </Box>
         </Box>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ marginTop: 4 }}>
         {watchedList?.map((movie, index) => (
           <React.Fragment key={movie.imdbID}>
             <ListItem alignItems="flex-start">

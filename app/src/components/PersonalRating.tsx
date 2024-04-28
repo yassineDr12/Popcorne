@@ -9,8 +9,9 @@ export const PersonalRating: React.FC<IPersonalRatingProps> = ({
   selectedMovie,
   movieDetailLoading,
   setSelectedMovie,
+  handleAddMovie,
 }) => {
-  const [ratingValue, setRatingValue] = React.useState<number | null>(0);
+  const [ratingValue, setRatingValue] = React.useState<number>(0);
 
   return movieDetailLoading ? (
     <Box
@@ -68,11 +69,17 @@ export const PersonalRating: React.FC<IPersonalRatingProps> = ({
                 value={ratingValue}
                 max={10}
                 onChange={(event, newValue) => {
-                  setRatingValue(newValue);
+                  setRatingValue(Number(newValue));
                 }}
                 sx={{ mb: 2, mt: 2 }}
               />
-              <Button variant="contained" endIcon={<AddIcon />} fullWidth sx={{ mb: 2 }}>
+              <Button
+                variant="contained"
+                endIcon={<AddIcon />}
+                fullWidth
+                sx={{ mb: 2 }}
+                onClick={() => selectedMovie && handleAddMovie(selectedMovie, ratingValue)}
+              >
                 Add to list
               </Button>
             </Box>
