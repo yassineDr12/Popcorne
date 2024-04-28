@@ -1,6 +1,7 @@
 import React from "react";
-import { ListItem, Divider, ListItemText, AccordionSummary, AccordionDetails, Typography, Box } from "@mui/material";
+import { ListItem, Divider, ListItemText, AccordionDetails, Typography, Box } from "@mui/material";
 import { IMovie, IWatchedListProps } from "../dataTypes";
+import MyAnimatedComponent from "./MyAnimatedComponent";
 
 function calculateTotalDuration(watchedList: IMovie[]): string {
   const durations = watchedList.map((movie) => movie.Length!);
@@ -29,40 +30,70 @@ const WatchedList: React.FC<IWatchedListProps> = ({ watchedList, watchedListRati
   }
 
   return watchedList.length ? (
-    <>
-      <AccordionSummary>
-        <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-          <Typography variant="h6" gutterBottom sx={{ textAlign: "center", marginTop: 6 }}>
-            MOVIES YOU WATCHED
+    <MyAnimatedComponent>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          backgroundColor: "background.default",
+          backdropFilter: "blur(5px)",
+        }}
+      >
+        <Typography variant="h6" gutterBottom sx={{ textAlign: "center", marginTop: 2 }}>
+          MOVIES YOU WATCHED
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", marginBottom: 3 }}>
+          <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
+            {`🎬${summary?.movies} movie${summary?.movies !== 1 ? "s" : ""}`}
           </Typography>
-          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-            <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`🎬${summary?.movies} movie${summary?.movies !== 1 ? "s" : ""}`}
-            </Typography>
-            <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`🌟${watchedListRating}`}
-            </Typography>
-            <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`⭐ ${summary?.averageRating}`}
-            </Typography>
-            <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
-              {`⌛ ${summary?.watchTime}`}
-            </Typography>
-          </Box>
+          <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
+            {`🌟${watchedListRating}`}
+          </Typography>
+          <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
+            {`⭐ ${summary?.averageRating}`}
+          </Typography>
+          <Typography variant="caption" display="block" gutterBottom sx={{ flexGrow: 1, textAlign: "center" }}>
+            {`⌛ ${summary?.watchTime}`}
+          </Typography>
         </Box>
-      </AccordionSummary>
-      <AccordionDetails sx={{ marginTop: 4 }}>
+      </Box>
+      <AccordionDetails sx={{ marginTop: 1 }}>
         {watchedList?.map((movie, index) => (
           <React.Fragment key={movie.imdbID}>
-            <ListItem alignItems="flex-start">
-              <img src={movie.Poster} alt={movie.Title} style={{ marginRight: "10px", width: "50", height: "125px" }} />
-              <ListItemText primary={movie.Title} secondary={movie.Year} />
+            <ListItem alignItems="flex-start" sx={{ width: "100%" }}>
+              <img
+                src={movie.Poster}
+                alt={movie.Title}
+                style={{
+                  marginRight: "20px",
+                  width: "100px",
+                  height: "150px",
+                  objectFit: "cover",
+                }}
+              />
+              <Box sx={{ flexGrow: 1 }}>
+                <ListItemText
+                  primary={movie.Title}
+                  secondary={`${movie.Year} - ${movie.Length}`}
+                  sx={{ marginBottom: "8px" }}
+                />
+                <Typography variant="body2" color="text.secondary" sx={{ marginBottom: "4px" }}>
+                  {movie.Genre}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  ⭐ {movie.imdbRating} IMDb rating
+                </Typography>
+              </Box>
             </ListItem>
             {index !== watchedList.length - 1 && <Divider sx={{ margin: "8px 0" }} />}
           </React.Fragment>
         ))}
       </AccordionDetails>
-    </>
+    </MyAnimatedComponent>
   ) : null;
 };
 

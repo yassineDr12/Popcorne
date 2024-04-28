@@ -9,15 +9,39 @@ import Navbar from "./Navbar";
 import { IMovie } from "../dataTypes";
 import axios from "axios";
 import { CssBaseline } from "@mui/material";
-// import AlignItemsList from "./Scratch";
 
 const fetchMovieData = async (searchQuery: string | undefined) => {
   try {
     const response = await axios.get(`https://www.omdbapi.com/?s=${searchQuery}&apikey=dbc2c0f9`);
-    const data = response.data.Search;
-    return data;
+    const movieList = response.data.Search;
+
+    if (!movieList) {
+      return [];
+    }
+
+    const detailedMovieList: IMovie[] = await Promise.all(
+      movieList.map(async (movie: IMovie) => {
+        const response = await axios.get(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=dbc2c0f9`);
+        const movieData = response.data;
+
+        return {
+          Title: movieData.Title,
+          Year: movieData.Year,
+          imdbID: movieData.imdbID,
+          Type: movieData.Type,
+          Poster: movieData.Poster,
+          Genre: movieData.Genre,
+          Plot: movieData.Plot,
+          Length: movieData.Runtime, // Assuming Runtime represents movie length
+          imdbRating: parseFloat(movieData.imdbRating), // Convert imdbRating to number
+        };
+      })
+    );
+
+    return detailedMovieList;
   } catch (error) {
     console.error("Error fetching movie data:", error);
+    return [];
   }
 };
 
@@ -67,7 +91,7 @@ function MyApp() {
 }
 
 export default function App() {
-  const [mode, setMode] = useState<"light" | "dark">("light");
+  const [mode, setMode] = useState<"light" | "dark">("dark");
   const colorMode = useMemo(
     () => ({
       App: () => {

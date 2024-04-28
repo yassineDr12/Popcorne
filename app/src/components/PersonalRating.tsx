@@ -1,31 +1,16 @@
 import React from "react";
-import { Card, CardContent, Typography, Rating, Button, Grid, Box, CircularProgress } from "@mui/material";
+import { Card, CardContent, Typography, Rating, Button, Grid, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { IPersonalRatingProps } from "../dataTypes";
 import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import MyAnimatedComponent from "./MyAnimatedComponent";
 
-export const PersonalRating: React.FC<IPersonalRatingProps> = ({
-  selectedMovie,
-  movieDetailLoading,
-  setSelectedMovie,
-  handleAddMovie,
-}) => {
+export const PersonalRating: React.FC<IPersonalRatingProps> = ({ selectedMovie, setSelectedMovie, handleAddMovie }) => {
   const [ratingValue, setRatingValue] = React.useState<number>(0);
 
-  return movieDetailLoading ? (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "10vh", // Set height of the container to full viewport height
-      }}
-    >
-      <CircularProgress />
-    </Box>
-  ) : (
-    <>
+  return (
+    <MyAnimatedComponent>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
           <img
@@ -92,7 +77,7 @@ export const PersonalRating: React.FC<IPersonalRatingProps> = ({
           {selectedMovie?.Plot}
         </Typography>
       </CardContent>
-    </>
+    </MyAnimatedComponent>
   );
 };
 

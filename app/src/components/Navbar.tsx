@@ -7,6 +7,7 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import popcornIcon from "../icons/popcorn-icon.png";
 import { INavbarProps } from "../dataTypes";
+import MyAnimatedComponent from "./MyAnimatedComponent";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,39 +61,41 @@ const Navbar: React.FC<INavbarProps> = ({ searchResults, movieSearchLoading, set
   };
 
   return (
-    <Box sx={{ flexGrow: 1, margin: 1 }}>
-      <StyledAppBar position="static">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <img src={popcornIcon} alt="Popcorn Icon" style={{ width: 32, height: 32, marginRight: 8 }} />
-            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
-              Popcorne
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Search sx={{ width: 150 }}>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                onKeyDown={handleSearch}
-                name="search movie"
-                placeholder="Search movies…"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
-            <Typography variant="caption" sx={{ width: 100, opacity: 0.5 }}>
-              {movieSearchLoading ? (
-                <div>Loading...</div>
-              ) : (
-                <div>{searchResults?.length > 0 ? `${searchResults.length} results found` : "No results found"}</div>
-              )}
-            </Typography>
-          </Box>
-          {children}
-        </Toolbar>
-      </StyledAppBar>
-    </Box>
+    <MyAnimatedComponent>
+      <Box sx={{ flexGrow: 1, margin: 1 }}>
+        <StyledAppBar position="static">
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <img src={popcornIcon} alt="Popcorn Icon" style={{ width: 32, height: 32, marginRight: 8 }} />
+              <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
+                Popcorn
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Search sx={{ width: 150 }}>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  onKeyDown={handleSearch}
+                  name="search movie"
+                  placeholder="Search movies…"
+                  inputProps={{ "aria-label": "search" }}
+                />
+              </Search>
+              <Typography variant="caption" sx={{ width: 100, opacity: 0.5 }}>
+                {movieSearchLoading ? (
+                  <div>Loading...</div>
+                ) : (
+                  <div>{searchResults?.length > 0 ? `${searchResults.length} results found` : "No results found"}</div>
+                )}
+              </Typography>
+            </Box>
+            {children}
+          </Toolbar>
+        </StyledAppBar>
+      </Box>
+    </MyAnimatedComponent>
   );
 };
 
