@@ -21,10 +21,12 @@ const Body: React.FC<IBodyProps> = ({ searchResults, movieSearchLoading }) => {
   };
 
   useEffect(() => {
-    setAlertSeverity("success");
-    setSnackbarMessage("Saved to Watch List!");
-    setSnackbar((prev) => !prev);
-    setSelectedMovie(undefined);
+    if (watchedList.length > 0) {
+      setAlertSeverity("success");
+      setSnackbarMessage("Saved to Watch List!");
+      setSnackbar((prev) => !prev);
+      setSelectedMovie(undefined);
+    }
   }, [watchedList]);
 
   const handleMovieClick = (movie: IMovie) => {
