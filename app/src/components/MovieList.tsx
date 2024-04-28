@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, CircularProgress, Box, ListItem, ListItemText, ButtonBase, Typography, Grid } from "@mui/material";
+import { Divider, CircularProgress, Box, ListItem, ListItemText, ButtonBase, Typography } from "@mui/material";
 import { IMovieListProps } from "../dataTypes";
 import MyAnimatedComponent from "./MyAnimatedComponent";
 
