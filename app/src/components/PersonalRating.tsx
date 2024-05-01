@@ -49,15 +49,24 @@ export const PersonalRating: React.FC<IPersonalRatingProps> = ({ selectedMovie, 
             }}
           >
             <Box sx={{ width: "300px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <Rating
-                name="simple-controlled"
-                value={ratingValue}
-                max={10}
-                onChange={(event, newValue) => {
-                  setRatingValue(Number(newValue));
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
                 }}
-                sx={{ mb: 2, mt: 2 }}
-              />
+              >
+                <Rating
+                  name="half-rating"
+                  defaultValue={ratingValue}
+                  precision={0.5}
+                  max={10}
+                  onChange={(event, newValue) => {
+                    setRatingValue(Number(newValue));
+                  }}
+                  sx={{ mb: 2, mt: 2 }}
+                />
+                <Typography sx={{ width: 40, textAlign: "center" }}>{ratingValue}</Typography>
+              </Box>
               <Button
                 variant="contained"
                 endIcon={<AddIcon />}
