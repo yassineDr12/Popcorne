@@ -1,10 +1,9 @@
 import React from "react";
-import { Card, CardContent, Typography, Rating, Button, Grid, Box } from "@mui/material";
+import { Card, CardContent, Typography, Rating, Button, Grid, Box, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { IPersonalRatingProps } from "../dataTypes";
-import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import MyAnimatedComponent from "./MyAnimatedComponent";
+import { IPersonalRatingProps } from "../dataTypes";
 
 export const PersonalRating: React.FC<IPersonalRatingProps> = ({ selectedMovie, setSelectedMovie, handleAddMovie }) => {
   const [ratingValue, setRatingValue] = React.useState<number>(0);
@@ -12,14 +11,10 @@ export const PersonalRating: React.FC<IPersonalRatingProps> = ({ selectedMovie, 
   return (
     <MyAnimatedComponent>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4}>
-          <img
-            src={selectedMovie?.Poster}
-            alt={selectedMovie?.Title}
-            style={{ marginRight: "10px", width: "150", height: "375px" }}
-          />
+        <Grid item xs={12} sm={6} md={4}>
+          <img src={selectedMovie?.Poster} alt={selectedMovie?.Title} style={{ width: "100%", maxHeight: "375px" }} />
         </Grid>
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12} sm={6} md={8}>
           <CardContent>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Typography gutterBottom variant="h5" component="div">
@@ -38,54 +33,35 @@ export const PersonalRating: React.FC<IPersonalRatingProps> = ({ selectedMovie, 
             <Typography variant="body2" color="text.secondary">
               ⭐ {selectedMovie?.imdbRating} IMDb rating
             </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {selectedMovie?.Plot}
+            </Typography>
           </CardContent>
-          <Card
-            sx={{
-              width: "400px",
-              borderRadius: 1,
-              margin: 2,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Box sx={{ width: "300px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+          <Card sx={{ borderRadius: 1, margin: 2 }}>
+            <CardContent>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Rating
                   name="half-rating"
-                  defaultValue={ratingValue}
+                  value={ratingValue}
                   precision={0.5}
                   max={10}
-                  onChange={(event, newValue) => {
-                    setRatingValue(Number(newValue));
-                  }}
-                  sx={{ mb: 2, mt: 2 }}
+                  onChange={(event, newValue) => setRatingValue(Number(newValue))}
                 />
-                <Typography sx={{ width: 40, textAlign: "center" }}>{ratingValue}</Typography>
+                <Typography sx={{ ml: 2 }}>{ratingValue}</Typography>
               </Box>
               <Button
                 variant="contained"
                 endIcon={<AddIcon />}
                 fullWidth
-                sx={{ mb: 2 }}
+                sx={{ mt: 2 }}
                 onClick={() => selectedMovie && handleAddMovie(selectedMovie, ratingValue)}
               >
                 Add to list
               </Button>
-            </Box>
+            </CardContent>
           </Card>
         </Grid>
       </Grid>
-
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {selectedMovie?.Plot}
-        </Typography>
-      </CardContent>
     </MyAnimatedComponent>
   );
 };
